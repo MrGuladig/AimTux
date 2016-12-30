@@ -186,6 +186,7 @@ static bool autoWallEnabled = false;
 static float autoWallValue = 10.0f;
 static bool autoWallBones[] = { true, false, false, false, false, false };
 static bool autoAimRealDistance;
+static bool faceit = false;
 
 void UI::updateWeaponSettings()
 {
@@ -196,7 +197,8 @@ void UI::updateWeaponSettings()
 									 autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
 									 rcsEnabled, rcsAlways_on, rcsFloat,
 									 autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
-									 noShootEnabled, ignoreJumpEnabled, smoke_check, autoWallEnabled, autoWallValue, autoWallBones, autoAimRealDistance);
+									 noShootEnabled, ignoreJumpEnabled, smoke_check, autoWallEnabled, autoWallValue, autoWallBones, autoAimRealDistance,
+									 faceit);
 
 	Settings::Aimbot::weapons[current_weapon] = settings;
 }
@@ -240,6 +242,7 @@ void reloadWeaponSettings()
 		autoWallBones[bone] = Settings::Aimbot::weapons[index].autoWallBones[bone];
 
 	autoAimRealDistance = Settings::Aimbot::weapons[index].autoAimRealDistance;
+	faceit = Settings::Aimbot::weapons[index].faceit;
 }
 
 void ColorsWindow()
@@ -505,6 +508,7 @@ void AimbotTab()
 							autoWallBones[bone] = Settings::Aimbot::weapons[index].autoWallBones[bone];
 
 						autoAimRealDistance = Settings::Aimbot::weapons[index].autoAimRealDistance;
+						faceit = Settings::Aimbot::weapons[index].faceit;
 					}
 				ImGui::PopID();
 			}
@@ -675,6 +679,10 @@ void AimbotTab()
 					UI::updateWeaponSettings();
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Ignore players that are in smoke");
+				if (ImGui::Checkbox("FaceIt", &faceit))
+					UI::updateWeaponSettings();
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip("FaceIt Safeness");
 			}
 			ImGui::NextColumn();
 			{
