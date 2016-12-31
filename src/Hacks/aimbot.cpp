@@ -11,6 +11,7 @@ extern "C"
 bool Settings::Aimbot::enabled = false;
 bool Settings::Aimbot::silent = false;
 bool Settings::Aimbot::faceit = false;
+float Settings::Aimbot::system_sens = 1.0f; //xinput --list-props <ID> -> constant deceleration, ID=current mouse's ID
 bool Settings::Aimbot::friendly = false;
 int Settings::Aimbot::bone = BONE_HEAD;
 ButtonCode_t Settings::Aimbot::aimkey = ButtonCode_t::MOUSE_MIDDLE;
@@ -59,7 +60,7 @@ std::unordered_map<int, std::vector<const char*>> hitboxes = {
 };
 
 std::unordered_map<int, Settings::Aimbot::Weapon> Settings::Aimbot::weapons = {
-		{ -1, Settings::Aimbot::Weapon(false, false, false, BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, false, false, false, false, false, false, false, 10.0f, &Settings::Aimbot::AutoWall::bones[0], false, false) },
+		{ -1, Settings::Aimbot::Weapon(false, false, false, BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, false, false, false, false, false, false, false, 10.0f, &Settings::Aimbot::AutoWall::bones[0], false, false, 1.0f) },
 };
 
 static void ApplyErrorToAngle(QAngle* angles, float margin)
@@ -541,15 +542,14 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 
 		if(Settings::Aimbot::faceit)
 		{
-			static float sys_sensitivity = 1.0f; //CHANGE ME IF NOT DEFAULT (xinput --list-props <ID> -> constant deceleration, ID=current mouse's ID)
 			float deltaAngleX = angle.x - oldAngle.x;
 			float deltaAngleY = angle.y - oldAngle.y;
 			ConVar* m_yaw = cvar->FindVar("m_yaw");
 			ConVar* m_pitch = cvar->FindVar("m_pitch");
 			ConVar* sensitivity = cvar->FindVar("sensitivity");
-			int pixelsX = deltaAngleX / (m_yaw->GetFloat() * sensitivity->GetFloat() * sys_sensitivity);
+			int pixelsX = deltaAngleX / (m_yaw->GetFloat() * sensitivity->GetFloat() * Settings::Aimbot::system_sens);
 			static xdo_t *xdo = xdo_new(NULL);
-			int pixelsY = deltaAngleY / (m_pitch->GetFloat() * sensitivity->GetFloat() * sys_sensitivity);
+			int pixelsY = deltaAngleY / (m_pitch->GetFloat() * sensitivity->GetFloat() * Settings::Aimbot::system_sens);
 			xdo_move_mouse_relative(xdo, -pixelsY, pixelsX);
 		}
 		else
@@ -630,4 +630,5 @@ void Aimbot::UpdateValues()
 
 	Settings::Aimbot::AutoAim::real_distance = currentWeaponSetting.autoAimRealDistance;
 	Settings::Aimbot::faceit = currentWeaponSetting.faceit;
+	Settings::Aimbot::system_sens = currentWeaponSetting.system_sens;
 }
