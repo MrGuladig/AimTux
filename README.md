@@ -31,7 +31,7 @@ sudo dnf install cmake gcc-c++ gdb git libstdc++-static mesa-libGL-devel SDL2-de
 
 __Gentoo:__
 ```bash
-sudo emerge cmake dev-vcs/git gdb libsdl2 mesa
+sudo emerge cmake dev-vcs/git gdb libsdl2 mesa xdotool
 ```
 
 If your compiler (`g++`) is out of date please follow [this](https://github.com/McSwaggens/AimTux/wiki/Updating-your-compiler) wiki page for a solution.
