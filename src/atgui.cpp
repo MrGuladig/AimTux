@@ -187,7 +187,6 @@ static float autoWallValue = 10.0f;
 static bool autoWallBones[] = { true, false, false, false, false, false };
 static bool autoAimRealDistance;
 static bool faceit = false;
-static float system_sens = 1.0f;
 
 void UI::updateWeaponSettings()
 {
@@ -199,7 +198,7 @@ void UI::updateWeaponSettings()
 									 rcsEnabled, rcsAlways_on, rcsFloat,
 									 autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
 									 noShootEnabled, ignoreJumpEnabled, smoke_check, autoWallEnabled, autoWallValue, autoWallBones, autoAimRealDistance,
-									 faceit, system_sens);
+									 faceit);
 
 	Settings::Aimbot::weapons[current_weapon] = settings;
 }
@@ -244,7 +243,6 @@ void reloadWeaponSettings()
 
 	autoAimRealDistance = Settings::Aimbot::weapons[index].autoAimRealDistance;
 	faceit = Settings::Aimbot::weapons[index].faceit;
-	system_sens = Settings::Aimbot::weapons[index].system_sens;
 }
 
 void ColorsWindow()
@@ -700,10 +698,6 @@ void AimbotTab()
 					UI::updateWeaponSettings();
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Prevents you from aimbotting while jumping");
-                if (ImGui::SliderFloat("###Sensitivity", &system_sens, 0.1, 10))
-					UI::updateWeaponSettings();
-                if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("System Sensitivity for FaceIT");
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
